@@ -1,5 +1,7 @@
 "use client"
 
+import Navbar from "@/components/navbar";
+import Image from "next/image";
 import React, { useState } from "react";
 
 const choices = ["Piedra", "Papel", "Tijera"]
@@ -42,29 +44,53 @@ const getResult = (player, computer) =>{
  }
 } 
 
-   return(
-    <div className="bg-[url('/bg.jpg')] bg-cover bg-center min-h-screen flex flex-col items-center justify-center">
-      <div>
-      <button onClick={() => handlePlayerChoice('Piedra')}>
-        Piedra
-      </button>
-      <button onClick={() => handlePlayerChoice('Papel')}>
-        Papel
-      </button>
-      <button onClick={() => handlePlayerChoice('Tijera')}>
-        Tijera
-      </button>
-      </div>
-   
-      {/* Renderizamos los resultados y elecciones */}
-      {result && (
-        <div>
-       <p>Jugador: {playerChoice}</p>
-       <p>Computadora: {computerChoice}</p>
-       <h1>Resultado: {result}</h1>
-      </div>
-      )}
+ return (
+    // ESTE es el nuevo contenedor principal con el fondo.
+    <main className="bg-[url('/bg.jpg')] bg-cover bg-center min-h-screen">
+      
+      {/* El Navbar ahora está DENTRO del contenedor con fondo */}
+      <Navbar />
 
-    </div>
-   ) 
+      {/* A este div le quitamos las clases de fondo y lo usamos solo para centrar el contenido del juego. */}
+      <div className="flex flex-col items-center justify-center flex-grow p-4">
+        
+        {/* Contenedor de botones */}
+        <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
+          {choices.map((choice) => (
+            <button
+              key={choice}
+              onClick={() => handlePlayerChoice(choice)}
+              className="cursor-pointer transition-all duration-300 hover:scale-110 hover:shadow-xl hover:bg-white flex flex-col items-center"
+            >
+              <Image
+                src={`/${choice.toLowerCase()}.png`}
+                width={200}
+                height={100}
+                alt={choice}
+                className="drop-shadow-lg"
+              />
+              <span className="mt-2 text-xl font-bold text-white [-webkit-text-stroke:1px_black]">
+                {choice}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Contenedor de resultados */}
+        <div className="mt-10">
+          {result && (
+            <div className="text-center bg-black/50 p-6 rounded-xl shadow-2xl">
+              <p className="text-white text-2xl">
+                Computadora: <span className="font-bold">{computerChoice}</span>
+              </p>
+              <h2 className="text-white text-4xl font-bold mt-2">
+                {result}
+              </h2>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </main>
+  );
 }
